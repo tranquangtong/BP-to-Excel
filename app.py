@@ -41,15 +41,16 @@ def convert_xlsx(uploaded_file):
         return None
 
 st.title("Chuyển đổi Excel sang CSV")
-uploaded_file = st.file_uploader("Chọn file Excel", type=["xlsx"])
+uploaded_files = st.file_uploader("Chọn file Excel", type=["xlsx"], accept_multiple_files=True)
 
-if uploaded_file is not None:
-    if st.button("Chuyển đổi"):
-        csv_data = convert_xlsx(uploaded_file)
-        if csv_data:
-            st.download_button(
-                label="Tải file CSV",
-                data=csv_data,
-                file_name="output.csv",
-                mime="text/csv"
-            )
+if uploaded_files:
+    for uploaded_file in uploaded_files:
+        if st.button(f"Chuyển đổi {uploaded_file.name}"):
+            csv_data = convert_xlsx(uploaded_file)
+            if csv_data:
+                st.download_button(
+                    label=f"Tải file CSV {uploaded_file.name.split('.')[0]}.csv",
+                    data=csv_data,
+                    file_name=f"{uploaded_file.name.split('.')[0]}.csv",
+                    mime="text/csv"
+                )
