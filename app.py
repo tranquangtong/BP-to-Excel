@@ -42,7 +42,7 @@ def convert_xlsx(uploaded_file):
         st.error(f"Lỗi: {e}")
         return None
 
-st.title("Chuyển đổi Excel sang CSV")
+st.title("Convert BP to Excel/Google Sheets")
 uploaded_files = st.file_uploader("Chọn file Excel", type=["xlsx"], accept_multiple_files=True)
 
 if uploaded_files:
