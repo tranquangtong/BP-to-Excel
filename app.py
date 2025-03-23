@@ -44,8 +44,8 @@ st.title("Chuyển đổi Excel sang CSV")
 uploaded_files = st.file_uploader("Chọn file Excel", type=["xlsx"], accept_multiple_files=True)
 
 if uploaded_files:
-    for uploaded_file in uploaded_files:
-        if st.button(f"Chuyển đổi {uploaded_file.name}"):
+    if st.button("Chuyển đổi tất cả"):
+        for uploaded_file in uploaded_files:
             csv_data = convert_xlsx(uploaded_file)
             if csv_data:
                 st.download_button(
