@@ -1,6 +1,8 @@
 import streamlit as st
 import pandas as pd
 import io
+import zipfile
+import os
 
 def preprocess_data(df):
     """Tiền xử lý dữ liệu input."""
@@ -44,13 +46,16 @@ st.title("Chuyển đổi Excel sang CSV")
 uploaded_files = st.file_uploader("Chọn file Excel", type=["xlsx"], accept_multiple_files=True)
 
 if uploaded_files:
-    if st.button("Chuyển đổi tất cả"):
-        for uploaded_file in uploaded_files:
-            csv_data = convert_xlsx(uploaded_file)
-            if csv_data:
-                st.download_button(
-                    label=f"Tải file CSV {uploaded_file.name.split('.')[0]}.csv",
-                    data=csv_data,
-                    file_name=f"{uploaded_file.name.split('.')[0]}.csv",
-                    mime="text/csv"
-                )
+    if st.button("Chuyển đổi và tải xuống tất cả"):
+        zip_buffer = io.BytesIO()
+        with zipfile.ZipFile(zip_buffer, 'w') as zip_file:
+            for uploaded_file in uploaded_files:
+                csv_data = convert_xlsx(uploaded_file)
+                if csv_data:
+                    zip_file.writestr(f"{uploaded_file.name.split('.')[0]}.csv", csv_data)
+        st.download_button(
+            label="Tải xuống tất cả file CSV",
+            data=zip_buffer.getvalue(),
+            file_name="output_csvs.zip",
+            mime="application/zip"
+        )
